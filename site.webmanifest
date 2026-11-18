@@ -1,0 +1,17 @@
+{
+  "name": "Gaurav Kumar — Freelance Engineer",
+  "short_name": "Gaurav Kumar",
+  "description": "Full-stack and AI product engineering portfolio.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#08090B",
+  "theme_color": "#08090B",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
