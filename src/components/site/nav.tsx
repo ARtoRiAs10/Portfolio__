@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useScroll } from "framer-motion";
 import { Menu } from "lucide-react";
@@ -80,13 +81,27 @@ export function Nav() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "border border-transparent px-2.5 py-1.5 text-[10px] tracking-[0.08em] text-muted-foreground transition-colors hover:border-border hover:text-foreground",
+                  "group relative border border-transparent px-2.5 py-1.5 text-[10px] tracking-[0.08em] text-muted-foreground transition-colors hover:border-border hover:text-foreground",
                   active === link.href && "border-border text-term-green",
                 )}
               >
                 [{link.label}]
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-2.5 -bottom-px h-px origin-left scale-x-0 bg-term-green transition-transform duration-300 group-hover:scale-x-100"
+                />
               </a>
             ))}
+            <Link
+              href="/profile"
+              className="group relative border border-transparent px-2.5 py-1.5 text-[10px] tracking-[0.08em] text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+            >
+              [profile]
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-2.5 -bottom-px h-px origin-left scale-x-0 bg-term-green transition-transform duration-300 group-hover:scale-x-100"
+              />
+            </Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -161,6 +176,14 @@ export function Nav() {
                     <span>[github]</span>
                     <Github className="size-3.5" />
                   </a>
+                  <Link
+                    href="/profile"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-between border-b border-border px-3 py-3 text-sm text-muted-foreground transition-colors hover:bg-term-green/5 hover:text-term-green"
+                  >
+                    <span>[profile]</span>
+                    <span className="text-term-dim">↵</span>
+                  </Link>
                   <a
                     href="#contact"
                     onClick={() => setOpen(false)}

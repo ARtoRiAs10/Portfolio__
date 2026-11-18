@@ -14,6 +14,7 @@ import { TerminalWindow } from "@/components/terminal/window";
 import { Typewriter } from "@/components/terminal/typewriter";
 import { projects, stats, type Project } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { EASE } from "@/lib/motion";
 
 type LineKind = "cmd" | "out" | "ok" | "dim" | "accent" | "error" | "projects";
 
@@ -380,7 +381,7 @@ export function HeroTerminal() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reducedMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reducedMotion ? 0 : 0.55, ease: EASE }}
         >
           <TerminalWindow
             title="gaurav@portfolio: ~ — zsh — 120×40"
@@ -504,7 +505,7 @@ export function HeroTerminal() {
                       key={command}
                       type="button"
                       onClick={() => runCommand(command)}
-                      className="border border-border px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:border-term-green/50 hover:text-term-green sm:text-[11px]"
+                      className="border border-border px-2 py-1 text-[10px] text-muted-foreground transition-all hover:-translate-y-px hover:border-term-green/50 hover:bg-term-green/5 hover:text-term-green sm:text-[11px]"
                     >
                       {command}
                     </button>

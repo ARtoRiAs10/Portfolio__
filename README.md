@@ -19,6 +19,8 @@ The site is designed as a working shell: an interactive terminal hero, a filesys
 | **Terminal design** | CRT scanlines, grid background, traffic-light window chrome, ASCII logo, mono typography, green/amber/cyan palette, blinking cursor. |
 | **SEO** | Metadata, Open Graph, a generated `/opengraph-image`, `robots.txt`, `sitemap.xml`, JSON-LD. |
 | **Responsive** | Tested from 320px to 1440px; mobile navigation uses a shadcn Sheet. |
+| **Animated profile page** | A dedicated `/profile` page with scroll-triggered reveals, gentle parallax, magnetic buttons, hover previews, and reduced-motion support. |
+| **GitHub profile kit** | `profile/` contains a ready-to-publish profile README and animated SVG banner/terminal assets for the `ARtoRiAs10/ARtoRiAs10` special repo. |
 
 ---
 
@@ -127,6 +129,37 @@ Terminal colors live in `src/app/globals.css`:
 ### Commands
 
 Edit the switch statement in `src/components/terminal/hero-terminal.tsx` to add or change commands. Command hints and autocomplete are defined near the top of the same file.
+
+---
+
+## GitHub profile page
+
+The site includes a dedicated animated profile page at **`/profile`**. It has:
+
+- Scroll-triggered fade-ups (300–500ms, transform/opacity only)
+- Gentle parallax on the hero grid, glow, and terminal card
+- Magnetic GitHub/email buttons
+- Floating project hover previews
+- Reduced-motion fallbacks and responsive layouts
+
+The **`profile/`** folder contains a ready-to-publish GitHub profile:
+
+```
+profile/
+├── README.md
+└── assets/
+    ├── profile-banner.svg
+    └── profile-terminal.svg
+```
+
+To publish it:
+
+1. Create a public GitHub repository named exactly **`ARtoRiAs10`** (the same as your username).
+2. Copy `profile/README.md` to the new repo as `README.md`.
+3. Copy the `profile/assets/` folder to the new repo as `assets/`.
+4. Commit and push.
+
+GitHub only renders the profile README from the special repo named after your username. Markdown cannot run JavaScript, so the animated `/profile` page is linked from the profile for the scroll/parallax/hover effects.
 
 ---
 

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { TerminalWindow } from "@/components/terminal/window";
 import { SectionHeader } from "@/components/site/section-header";
 import { buttonVariants } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
 import { cn } from "@/lib/utils";
 
 const email = "gauravkum2002@gmail.com";
@@ -93,16 +94,18 @@ export function Contact() {
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <a
-                    href={`mailto:${email}?subject=Project%20inquiry`}
-                    className={cn(
-                      buttonVariants({ variant: "default" }),
-                      "rounded-none bg-term-green text-primary-foreground hover:bg-term-green/80",
-                    )}
-                  >
-                    email me
-                    <Mail className="size-3.5" />
-                  </a>
+                  <Magnetic strength={0.22} max={6}>
+                    <a
+                      href={`mailto:${email}?subject=Project%20inquiry`}
+                      className={cn(
+                        buttonVariants({ variant: "default" }),
+                        "rounded-none bg-term-green text-primary-foreground hover:bg-term-green/80",
+                      )}
+                    >
+                      email me
+                      <Mail className="size-3.5" />
+                    </a>
+                  </Magnetic>
                   <button
                     type="button"
                     onClick={copyEmail}

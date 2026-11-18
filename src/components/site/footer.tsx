@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function Footer() {
@@ -28,7 +29,12 @@ export function Footer() {
         <span>
           © {year} <span className="text-foreground/80">gaurav kumar</span>
         </span>
-        <span>next.js + shadcn/ui · no templates</span>
+        <span className="flex items-center gap-3">
+          <span>next.js + shadcn/ui · no templates</span>
+          <Link href="/profile" className="transition-colors hover:text-term-green">
+            profile ↗
+          </Link>
+        </span>
         <span className="flex flex-wrap items-center gap-3">
           <span>
             local time <span className="text-term-green">{time}</span>

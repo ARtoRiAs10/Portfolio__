@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { EASE } from "@/lib/motion";
 
 type SectionHeaderProps = {
   index: string;
@@ -24,7 +25,7 @@ export function SectionHeader({
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: reducedMotion ? 0 : 0.45 }}
+      transition={{ duration: reducedMotion ? 0 : 0.45, ease: EASE }}
       className="mb-8"
     >
       <div className="flex flex-wrap items-center gap-2 text-[9px] tracking-[0.2em] text-term-dim uppercase">

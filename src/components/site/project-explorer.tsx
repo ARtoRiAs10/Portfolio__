@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "framer-motion";
 import { ExternalLink, Copy, X } from "lucide-react";
 import { GithubIcon as Github } from "@/components/icons/github";
 import { toast } from "sonner";
@@ -15,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TerminalWindow } from "@/components/terminal/window";
+import { FloatingProjectPreview } from "@/components/site/floating-project-preview";
 import { SectionHeader } from "@/components/site/section-header";
 import {
   categoryFilters,
@@ -27,7 +34,44 @@ import { cn } from "@/lib/utils";
 export function ProjectExplorer() {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [selected, setSelected] = useState<Project | null>(null);
+  const [preview, setPreview] = useState<Project | null>(null);
   const reducedMotion = useReducedMotion();
+  const finePointer = useRef(false);
+
+  const previewX = useMotionValue(0);
+  const previewY = useMotionValue(0);
+  const springX = useSpring(previewX, { stiffness: 260, damping: 26, mass: 0.3 });
+  const springY = useSpring(previewY, { stiffness: 260, damping: 26, mass: 0.3 });
+
+  useEffect(() => {
+    const query = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => {
+      finePointer.current = query.matches;
+      if (!query.matches) setPreview(null);
+    };
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const hide = () => setPreview(null);
+    window.addEventListener("scroll", hide, { passive: true });
+    return () => window.removeEventListener("scroll", hide);
+  }, []);
+
+  const movePreview = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!finePointer.current || reducedMotion) return;
+    const width = 300;
+    const height = 210;
+    const offset = 20;
+    let x = event.clientX + offset;
+    let y = event.clientY + offset;
+    if (x + width > window.innerWidth - 16) x = event.clientX - width - offset;
+    if (y + height > window.innerHeight - 16) y = event.clientY - height - offset;
+    previewX.set(Math.max(16, Math.min(x, window.innerWidth - width - 16)));
+    previewY.set(Math.max(16, Math.min(y, window.innerHeight - height - 16)));
+  };
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -77,7 +121,7 @@ export function ProjectExplorer() {
                     onClick={() => setFilter(item.key)}
                     aria-pressed={filter === item.key}
                     className={cn(
-                      "border px-2 py-1 text-[9px] transition-colors sm:text-[10px]",
+                      "border px-2 py-1 text-[9px] transition-all hover:-translate-y-px sm:text-[10px]",
                       filter === item.key
                         ? "border-term-green bg-term-green/10 text-term-green"
                         : "border-border text-muted-foreground hover:border-term-green/40 hover:text-foreground",
@@ -103,7 +147,7 @@ export function ProjectExplorer() {
                     key={project.slug}
                     type="button"
                     onClick={() => setSelected(project)}
-                    className="border border-term-amber/25 px-2 py-1 text-[9px] text-term-amber transition-colors hover:border-term-amber/60 hover:bg-term-amber/5"
+                    className="border border-term-amber/25 px-2 py-1 text-[9px] text-term-amber transition-all hover:-translate-y-0.5 hover:border-term-amber/60 hover:bg-term-amber/10"
                   >
                     {project.command}
                     {typeof project.stars === "number" ? (
@@ -122,7 +166,11 @@ export function ProjectExplorer() {
               <span />
             </div>
 
-            <div className="min-h-20">
+            <div
+              className="min-h-20"
+              onPointerMove={movePreview}
+              onPointerLeave={() => setPreview(null)}
+            >
               <AnimatePresence initial={false} mode="popLayout">
                 {filtered.map((project, index) => (
                   <motion.button
@@ -137,12 +185,16 @@ export function ProjectExplorer() {
                       delay: reducedMotion ? 0 : Math.min(index * 0.015, 0.12),
                     }}
                     onClick={() => setSelected(project)}
-                    className="project-row group grid w-full grid-cols-[2.2rem_1fr_1rem] items-center gap-3 border-b border-border px-3 py-3 text-left sm:grid-cols-[2.2rem_1fr_5.5rem_4.5rem_3rem_1rem]"
+                    onPointerEnter={() => {
+                      if (finePointer.current && !reducedMotion) setPreview(project);
+                    }}
+                    onPointerLeave={() => setPreview(null)}
+                    className="project-row group grid w-full grid-cols-[2.2rem_1fr_1.75rem] items-center gap-3 border-b border-border px-3 py-3 text-left sm:grid-cols-[2.2rem_1fr_5.5rem_4.5rem_3rem_1.75rem]"
                   >
-                    <span className="text-[9px] text-term-dim">
+                    <span className="text-[9px] text-term-dim transition-all group-hover:scale-110 group-hover:text-term-green">
                       {project.glyph}
                     </span>
-                    <span className="min-w-0">
+                    <span className="min-w-0 transition-transform group-hover:translate-x-0.5">
                       <span className="flex flex-wrap items-center gap-1.5">
                         <span className="text-[13px] text-foreground transition-colors group-hover:text-term-green">
                           {project.command}
@@ -169,20 +221,20 @@ export function ProjectExplorer() {
                           </span>
                         ) : null}
                       </span>
-                      <span className="mt-0.5 block truncate text-[10px] text-muted-foreground sm:text-[11px]">
+                      <span className="mt-0.5 block truncate text-[10px] text-muted-foreground transition-colors group-hover:text-foreground/80 sm:text-[11px]">
                         {project.tagline}
                       </span>
                     </span>
-                    <span className="hidden text-[10px] text-term-dim sm:block">
+                    <span className="hidden text-[10px] text-term-dim transition-colors group-hover:text-term-green/70 sm:block">
                       {project.categoryLabel}
                     </span>
-                    <span className="hidden text-[10px] text-term-dim sm:block">
+                    <span className="hidden text-[10px] text-term-dim transition-colors group-hover:text-term-green/70 sm:block">
                       {project.modified}
                     </span>
-                    <span className="hidden text-[10px] text-term-dim sm:block">
+                    <span className="hidden text-[10px] text-term-dim transition-colors group-hover:text-term-green/70 sm:block">
                       {project.size}
                     </span>
-                    <span className="text-term-dim transition-all group-hover:translate-x-0.5 group-hover:text-term-green">
+                    <span className="grid size-6 place-items-center rounded-full border border-border text-[10px] text-term-dim transition-all group-hover:translate-x-0.5 group-hover:border-term-green group-hover:bg-term-green group-hover:text-primary-foreground">
                       →
                     </span>
                   </motion.button>
@@ -209,6 +261,8 @@ export function ProjectExplorer() {
           project={selected}
           onClose={() => setSelected(null)}
         />
+
+        <FloatingProjectPreview project={preview} x={springX} y={springY} />
       </div>
     </section>
   );
@@ -362,7 +416,7 @@ function ProjectDialog({
                     rel="noopener noreferrer"
                     className={cn(
                       buttonVariants({ variant: "default" }),
-                      "rounded-none bg-term-green text-primary-foreground hover:bg-term-green/80",
+                      "rounded-none bg-term-green text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-term-green/80 hover:shadow-[0_10px_30px_rgba(124,255,178,0.14)]",
                     )}
                   >
                     live demo
@@ -375,7 +429,7 @@ function ProjectDialog({
                   rel="noopener noreferrer"
                   className={cn(
                     buttonVariants({ variant: "outline" }),
-                    "rounded-none border-border hover:border-term-green/50 hover:text-term-green",
+                    "rounded-none border-border transition-all duration-300 hover:-translate-y-0.5 hover:border-term-green/50 hover:text-term-green",
                   )}
                 >
                   source
@@ -388,7 +442,7 @@ function ProjectDialog({
                     rel="noopener noreferrer"
                     className={cn(
                       buttonVariants({ variant: "ghost" }),
-                      "rounded-none text-term-dim hover:text-term-green",
+                      "rounded-none text-term-dim transition-all duration-300 hover:-translate-y-0.5 hover:text-term-green",
                     )}
                   >
                     original
@@ -400,7 +454,7 @@ function ProjectDialog({
                   onClick={copyCommand}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "rounded-none text-term-dim hover:text-term-green",
+                    "rounded-none text-term-dim transition-all duration-300 hover:-translate-y-0.5 hover:text-term-green",
                   )}
                 >
                   copy command
