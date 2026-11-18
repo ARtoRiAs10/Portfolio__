@@ -10,7 +10,7 @@ import { SectionHeader } from "@/components/site/section-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const email = "hello@gauravkumar.dev";
+const email = "gauravkum2002@gmail.com";
 
 export function Contact() {
   const reducedMotion = useReducedMotion();

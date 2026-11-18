@@ -32,5 +32,8 @@
     "typescript": "^5",
     "shadcn": "^4.23.0"
   },
-  "description": "Terminal-style freelance portfolio built with Next.js and shadcn/ui"
+  "description": "Terminal-style freelance portfolio built with Next.js and shadcn/ui",
+  "engines": {
+    "node": ">=20.9.0"
+  }
 }

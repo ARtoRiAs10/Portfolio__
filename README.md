@@ -61,19 +61,22 @@ npm run lint
 
 ### Contact details
 
-Search for `hello@gauravkumar.dev` in:
+The contact email is set in:
 
-- `src/components/site/contact.tsx`
-- `src/app/layout.tsx` (metadata)
-- `src/app/robots.ts` / `src/app/sitemap.ts` (site URL)
+- `src/components/site/contact.tsx` → `const email = "gauravkum2002@gmail.com"`
+- `src/lib/site.ts` → `siteConfig.email`
+
+Keep both values in sync if you change it.
 
 ### Site URL
 
-Replace `https://gauravkumar.dev` in:
+The canonical URL is read from:
 
-- `src/app/layout.tsx`
-- `src/app/robots.ts`
-- `src/app/sitemap.ts`
+- `NEXT_PUBLIC_SITE_URL` — set this to your custom domain, for example `https://gauravkumar.dev`
+- `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL` — automatically provided by Vercel, for example `my-app.vercel.app`
+- Falls back to `http://localhost:3000` for local development
+
+No hard-coded domain is needed for a Vercel deployment. Add `NEXT_PUBLIC_SITE_URL` in the Vercel dashboard only if you want a custom domain in canonical/OG/sitemap URLs. See `.env.example`.
 
 ### Projects
 
@@ -131,11 +134,19 @@ Edit the switch statement in `src/components/terminal/hero-terminal.tsx` to add 
 
 ### Vercel (recommended)
 
-1. Import the repository.
-2. Framework preset: **Next.js**.
-3. Build command: `npm run build`.
-4. Output: default Next.js output.
-5. Add your domain and update the metadata URLs.
+The repo includes `vercel.json`, so the framework, build command, output directory, and security headers are already configured.
+
+1. Push the repository to GitHub.
+2. In Vercel, click **Add New → Project** and import `ARtoRiAs10/project`.
+3. Framework preset: **Next.js** (auto-detected).
+4. Build command: `npm run build`.
+5. Output directory: `.next`.
+6. Add an environment variable if you have a custom domain:
+   - `NEXT_PUBLIC_SITE_URL=https://your-domain.com`
+   - Without it, Vercel uses the deployment URL automatically.
+7. Click **Deploy**.
+
+The project uses the Node.js version provided by Vercel. No database or server secrets are required.
 
 ### Netlify
 
@@ -161,5 +172,5 @@ GitHub Pages is not the default target for a Next.js App Router build. If you ne
 - The terminal is an interactive frontend demo, not a real shell. It never executes code on a server.
 - The `sudo hire-me` command is an easter egg that scrolls to the contact section.
 - `MeloSynthiaAI` is a pinned project from the GitHub profile and is credited to its original author, AYUSHMAN0503.
-- Replace the placeholder email and domain before going live.
+- The contact email is already set to `gauravkum2002@gmail.com`. Set `NEXT_PUBLIC_SITE_URL` for a custom domain, or let Vercel detect `VERCEL_URL`.
 - The site has no analytics or trackers. Add a privacy-friendly analytics provider if you want traffic data.

@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "@/components/providers";
+import { siteConfig, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -11,16 +12,13 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://gauravkumar.dev";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Gaurav Kumar — Terminal Portfolio",
-    template: "%s — Gaurav Kumar",
+    default: siteConfig.title,
+    template: `%s — ${siteConfig.name}`,
   },
-  description:
-    "Gaurav Kumar is a freelance full-stack and AI engineer building SaaS platforms, real-time collaboration tools, and developer infrastructure. Explore selected projects in a terminal-style portfolio.",
+  description: siteConfig.description,
   keywords: [
     "Gaurav Kumar",
     "full-stack engineer",
@@ -33,18 +31,17 @@ export const metadata: Metadata = {
     "developer infrastructure",
     "portfolio",
   ],
-  authors: [{ name: "Gaurav Kumar", url: siteUrl }],
-  creator: "Gaurav Kumar",
+  authors: [{ name: siteConfig.name, url: siteUrl }],
+  creator: siteConfig.name,
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Gaurav Kumar",
-    title: "Gaurav Kumar — Terminal Portfolio",
-    description:
-      "Full-stack and AI product engineering: SaaS platforms, real-time tools, and developer infrastructure.",
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: [
       {
         url: "/opengraph-image",
@@ -56,9 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gaurav Kumar — Terminal Portfolio",
-    description:
-      "Full-stack and AI product engineering: SaaS platforms, real-time tools, and developer infrastructure.",
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: ["/opengraph-image"],
   },
   icons: {
