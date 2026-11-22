@@ -109,3 +109,32 @@ export function playSuccess() {
     delay: 0.18,
   });
 }
+export function playHorn() {
+  if (!enabled()) return;
+  tone({
+    frequency: 220,
+    endFrequency: 180,
+    duration: 0.28,
+    volume: 0.035,
+    type: "sawtooth",
+  });
+  tone({
+    frequency: 277,
+    endFrequency: 220,
+    duration: 0.28,
+    volume: 0.02,
+    type: "square",
+    delay: 0.02,
+  });
+}
+
+export function playBoost() {
+  if (!enabled()) return;
+  tone({
+    frequency: 120,
+    endFrequency: 520,
+    duration: 0.4,
+    volume: 0.025,
+    type: "sawtooth",
+  });
+}

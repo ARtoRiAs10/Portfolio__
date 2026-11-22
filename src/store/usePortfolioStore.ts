@@ -10,7 +10,10 @@ export type ZoneId =
   | "projects"
   | "skills"
   | "services"
-  | "contact";
+  | "contact"
+  | "game"
+  | "ai"
+  | "data";
 
 export type ThemeName = "matrix" | "mocha" | "cyber" | "minimal";
 

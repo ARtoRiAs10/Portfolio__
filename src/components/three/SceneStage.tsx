@@ -2,11 +2,15 @@
 
 import dynamic from "next/dynamic";
 import { Component, useEffect, useState, type ReactNode } from "react";
-import { Gauge, RotateCcw, Terminal } from "lucide-react";
+import { Gamepad2, Gauge, RotateCcw, Terminal } from "lucide-react";
 import { toast } from "sonner";
 import { TerminalShell } from "@/components/cli/TerminalShell";
 import { TouchJoystick } from "@/components/three/TouchJoystick";
+import { TouchControls } from "@/components/three/TouchControls";
+import { RoverHud } from "@/components/three/RoverHud";
 import { usePortfolioStore } from "@/store/usePortfolioStore";
+import { useGameStore } from "@/store/useGameStore";
+import { useRoverStore } from "@/store/useRoverStore";
 import { cn } from "@/lib/utils";
 
 const WorldCanvas = dynamic(
@@ -66,12 +70,14 @@ class SceneErrorBoundary extends Component<
 export function SceneStage() {
   const viewMode = usePortfolioStore((state) => state.viewMode);
   const setViewMode = usePortfolioStore((state) => state.setViewMode);
+  const setActiveZone = usePortfolioStore((state) => state.setActiveZone);
   const terminalOpen = usePortfolioStore((state) => state.terminalOpen);
   const setTerminalOpen = usePortfolioStore((state) => state.setTerminalOpen);
   const [resetKey, setResetKey] = useState(0);
+  const worldReady = useRoverStore((state) => state.ready);
 
   useEffect(() => {
-    if (viewMode !== "3d") return;
+    if (viewMode !== "3d" || !worldReady) return;
     let frame = 0;
     let frames = 0;
     let start = performance.now();
@@ -108,7 +114,7 @@ export function SceneStage() {
       window.clearTimeout(startDelay);
       cancelAnimationFrame(frame);
     };
-  }, [viewMode, setViewMode]);
+  }, [viewMode, worldReady, setViewMode]);
 
   if (viewMode !== "3d") return null;
 
@@ -131,9 +137,18 @@ export function SceneStage() {
           WASD / arrows to drive · drag to orbit
         </div>
         <div className="mt-0.5 text-[9px] text-term-dim">
+          space brake · shift boost · l lights · h horn · r reset
+        </div>
+        <div className="mt-0.5 text-[9px] text-term-dim">
           click a monitor, block, kiosk, or beacon
         </div>
       </div>
+
+      {!worldReady ? (
+        <div className="pointer-events-none absolute top-1/2 left-1/2 z-40 -translate-x-1/2 -translate-y-1/2 border border-term-amber/30 bg-background/70 px-3 py-1.5 text-[9px] tracking-[0.16em] text-term-amber uppercase backdrop-blur">
+          initializing physics...
+        </div>
+      ) : null}
 
       {terminalOpen ? (
         <div className="absolute bottom-3 left-3 z-40 w-[calc(100%-1.5rem)] max-w-2xl">
@@ -156,7 +171,30 @@ export function SceneStage() {
         </button>
       )}
 
+      <RoverHud />
+
       <div className="absolute right-3 bottom-3 z-40 flex flex-col items-end gap-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveZone("game");
+            useGameStore.getState().reset();
+          }}
+          className="flex items-center gap-1.5 border border-term-cyan/30 bg-term-cyan/5 px-2.5 py-1.5 text-[9px] tracking-[0.12em] text-term-cyan uppercase backdrop-blur transition-colors hover:bg-term-cyan/10"
+        >
+          <Gamepad2 className="size-3" />
+          game island
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            window.dispatchEvent(new Event("portfolio:rover-reset"));
+          }}
+          className="flex items-center gap-1.5 border border-border bg-background/80 px-2.5 py-1.5 text-[9px] tracking-[0.12em] text-term-dim uppercase backdrop-blur transition-colors hover:border-term-amber/50 hover:text-term-amber"
+        >
+          <RotateCcw className="size-3" />
+          reset rover
+        </button>
         <button
           type="button"
           onClick={() => setResetKey((value) => value + 1)}
@@ -175,7 +213,13 @@ export function SceneStage() {
           <Gauge className="size-3" />
           exit to fast mode
         </button>
-        {terminalOpen ? (
+        {!worldReady ? (
+        <div className="pointer-events-none absolute top-1/2 left-1/2 z-40 -translate-x-1/2 -translate-y-1/2 border border-term-amber/30 bg-background/70 px-3 py-1.5 text-[9px] tracking-[0.16em] text-term-amber uppercase backdrop-blur">
+          initializing physics...
+        </div>
+      ) : null}
+
+      {terminalOpen ? (
           <button
             type="button"
             onClick={() => setTerminalOpen(false)}
@@ -187,6 +231,7 @@ export function SceneStage() {
       </div>
 
       <TouchJoystick />
+      <TouchControls />
     </div>
   );
 }

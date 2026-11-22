@@ -136,6 +136,34 @@ export const commandGroups: {
         category: "world",
         keywords: ["search", "jump", "command"],
       },
+      {
+        name: "game",
+        usage: "game",
+        description: "fly to Game Island and reset the ring run",
+        category: "world",
+        keywords: ["rings", "play", "arcade"],
+      },
+      {
+        name: "ai",
+        usage: "ai",
+        description: "fly to the AI Lab",
+        category: "world",
+        keywords: ["rag", "agents", "lab"],
+      },
+      {
+        name: "data",
+        usage: "data",
+        description: "fly to the Data Harbor",
+        category: "world",
+        keywords: ["infra", "queues", "stats"],
+      },
+      {
+        name: "score",
+        usage: "score",
+        description: "show the Game Island ring score",
+        category: "world",
+        keywords: ["rings", "game"],
+      },
     ],
   },
   {
@@ -199,4 +227,7 @@ export const zoneNames = [
   "skills",
   "services",
   "contact",
+  "game",
+  "ai",
+  "data",
 ] as const;

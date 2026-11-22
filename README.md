@@ -1,5 +1,9 @@
 # Gaurav Kumar — Dual-Mode Freelance Portfolio
 
+<p align="center">
+  <img src="public/banner.svg" alt="Gaurav Kumar — Full-Stack & AI Engineer. A dual-mode terminal + 3D portfolio." width="100%" />
+</p>
+
 A terminal portfolio that works for **non-technical buyers** and **developers** at the same time.
 
 - **Fast mode** — a responsive 2D site with a working CLI, case studies, services, and a budget estimator.
@@ -21,7 +25,7 @@ Built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **
 | **Case studies** | 15 projects with role, year, problem, approach, measurable outcome, metrics, stack, live demo, and source. |
 | **Services** | Basic / Standard / Premium packages with fixed scope, timeline, outcome, and CTA. |
 | **Estimator** | A 3-step scope → timeline → integrations wizard that prints a budget range and a copyable brief for Fiverr or email. |
-| **3D world** | Low-poly island with a project arcade, physics skill playground, services kiosk, hire beacon, and a drivable rover (WASD / arrows / mobile joystick). |
+| **3D world** | A low-poly archipelago with four connected islands (Tech Island, Game Island, AI Lab, Data Harbor), a drivable rover with brakes/boost/headlights, Rapier physics, knockable skill blocks, and a touch joystick. |
 | **Command palette** | `Ctrl/Cmd + K` to jump to commands, projects, themes, or sections. |
 | **Themes** | `matrix`, `mocha`, `cyber`, and `minimal` (light). Persisted in localStorage. |
 | **Sound** | Subtle Web Audio key clicks, camera whooshes, and collision thuds. Muted by default; toggle in the HUD. |
@@ -47,6 +51,10 @@ Built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **
 | `skills` | Flies to the physics skill playground and prints the stack. |
 | `cd <hero\|projects\|skills\|services\|contact>` | Moves the camera to a zone. |
 | `drive` | Enters the 3D world and enables rover controls. |
+| `game` | Flies to Game Island, resets the ring run, and shows the score. |
+| `ai` | Flies to the AI Lab. |
+| `data` | Flies to the Data Harbor. |
+| `score` | Shows the Game Island ring score. |
 | `mode <fast\|minimal\|3d>` | Switches between the 2D site and the 3D world. |
 | `theme <matrix\|mocha\|cyber\|minimal>` | Changes the palette. |
 | `contact` / `hire` | Opens the hire brief, Fiverr link, Calendly link, and email form. |
@@ -56,6 +64,8 @@ Built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **
 | `whoami`, `neofetch`, `history`, `date`, `pwd`, `echo` | Shell conveniences. |
 
 **Keyboard:** `↑`/`↓` history · `Tab` autocomplete · `Ctrl/Cmd + K` palette · `Ctrl/Cmd + L` clear · `/` focus terminal.
+
+**3D rover controls:** `WASD` / arrows drive · `Space` brake · `Shift` boost · `L` headlights · `H` horn · `R` reset. Drag to orbit. On mobile, use the joystick and the brake / boost / lights buttons.
 
 ---
 
@@ -138,11 +148,19 @@ src/
 │   ├── three/
 │   │   ├── SceneStage.tsx
 │   │   ├── WorldCanvas.tsx
+│   │   ├── World.tsx
 │   │   ├── WorldIsland.tsx
+│   │   ├── GameIsland.tsx
+│   │   ├── AILab.tsx
+│   │   ├── DataHarbor.tsx
+│   │   ├── Environment.tsx
+│   │   ├── WorldPrimitives.tsx
 │   │   ├── RoverController.tsx
+│   │   ├── RoverHud.tsx
+│   │   ├── TouchControls.tsx
+│   │   ├── TouchJoystick.tsx
 │   │   ├── SkillBlocks.tsx
-│   │   ├── CameraRig.tsx
-│   │   └── TouchJoystick.tsx
+│   │   └── CameraRig.tsx
 │   ├── site/                    # fast-mode sections
 │   └── terminal/                # window + typewriter
 ├── data/
@@ -164,6 +182,7 @@ src/
 - 3D canvas is lazy-loaded with `next/dynamic` and `ssr: false`.
 - Low-poly geometry, no real-time shadows, capped DPR, and `AdaptiveDpr`.
 - `PerformanceMonitor` + `AdaptiveDpr` lower resolution on slower GPUs.
+- A custom low-FPS watchdog automatically switches to fast mode if the 3D world cannot hold ~24fps.
 - Fast mode is the default and the automatic fallback if WebGL fails.
 - All motion respects `prefers-reduced-motion`.
 - Skip link, focus states, ARIA labels, semantic headings, and keyboard-friendly controls.

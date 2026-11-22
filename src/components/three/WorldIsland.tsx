@@ -1,20 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Billboard, Text, useCursor } from "@react-three/drei";
+import { useCursor } from "@react-three/drei";
 import { projects } from "@/lib/data";
 import { emitCommand } from "@/lib/events";
 import { usePortfolioStore } from "@/store/usePortfolioStore";
-
-type Vec3 = [number, number, number];
-
-const zoneCenters: Record<string, Vec3> = {
-  hero: [0, 0, 0],
-  projects: [-8, 0, -3],
-  skills: [8, 0, -3],
-  services: [0, 0, -10],
-  contact: [0, 0, 8],
-};
+import { ISLANDS, MAIN_ZONES, WORLD_LABEL, type Vec3 } from "@/components/three/worldConfig";
+import {
+  Island,
+  Path,
+  Rock,
+  Tree,
+  WorldLabel,
+  ZonePad,
+} from "@/components/three/WorldPrimitives";
 
 export function WorldIsland() {
   const openProject = usePortfolioStore((state) => state.openProject);
@@ -29,42 +28,27 @@ export function WorldIsland() {
   );
 
   return (
-    <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.58, 0]}>
-        <circleGeometry args={[46, 64]} />
-        <meshStandardMaterial
-          color="#062a2f"
-          roughness={0.22}
-          metalness={0.35}
-          transparent
-          opacity={0.92}
-        />
-      </mesh>
+    <Island
+      position={ISLANDS.main.position}
+      radius={ISLANDS.main.radius}
+      top="#1f5a35"
+      topAlt="#2f7d4a"
+      rock="#3a2818"
+      sand="#c2a26b"
+    >
+      <WorldLabel position={[0, 4.6, 0]} color="#7cffb2" size={0.34}>
+        {WORLD_LABEL.main}
+      </WorldLabel>
 
-      <mesh position={[0, -0.7, 0]}>
-        <cylinderGeometry args={[12, 10.2, 1.4, 9]} />
-        <meshStandardMaterial color="#3a2818" flatShading />
-      </mesh>
+      <Path from={MAIN_ZONES.hero} to={MAIN_ZONES.projects} />
+      <Path from={MAIN_ZONES.hero} to={MAIN_ZONES.skills} />
+      <Path from={MAIN_ZONES.hero} to={MAIN_ZONES.services} />
+      <Path from={MAIN_ZONES.hero} to={MAIN_ZONES.contact} />
 
-      <mesh position={[0, 0.02, 0]}>
-        <cylinderGeometry args={[11.8, 11.8, 0.24, 9]} />
-        <meshStandardMaterial color="#1f5a35" flatShading />
-      </mesh>
-
-      <mesh position={[0, 0.15, 0]}>
-        <cylinderGeometry args={[2.6, 2.8, 0.12, 12]} />
-        <meshStandardMaterial color="#2b6b43" flatShading />
-      </mesh>
-
-      <Path from={[0, 0, 0]} to={[-8, 0, -3]} />
-      <Path from={[0, 0, 0]} to={[8, 0, -3]} />
-      <Path from={[0, 0, 0]} to={[0, 0, -10]} />
-      <Path from={[0, 0, 0]} to={[0, 0, 8]} />
-
-      <ZonePad position={zoneCenters.projects} color="#7cffb2" />
-      <ZonePad position={zoneCenters.skills} color="#67e8f9" />
-      <ZonePad position={zoneCenters.services} color="#ffc857" />
-      <ZonePad position={zoneCenters.contact} color="#ff8fa3" />
+      <ZonePad position={MAIN_ZONES.projects} color="#7cffb2" />
+      <ZonePad position={MAIN_ZONES.skills} color="#67e8f9" />
+      <ZonePad position={MAIN_ZONES.services} color="#ffc857" />
+      <ZonePad position={MAIN_ZONES.contact} color="#ff8fa3" />
 
       <HeroDesk />
 
@@ -94,48 +78,29 @@ export function WorldIsland() {
         }}
       />
 
+      <Dock position={[11.6, 0, -2]} rotation={-Math.PI / 2} />
+      <Dock position={[-11.6, 0, -1]} rotation={Math.PI / 2} />
+      <Dock position={[0, 0, -11.6]} rotation={0} />
+
       <Trees />
       <Rocks />
-    </group>
+    </Island>
   );
 }
 
-function Path({ from, to }: { from: Vec3; to: Vec3 }) {
-  const dx = to[0] - from[0];
-  const dz = to[2] - from[2];
-  const length = Math.hypot(dx, dz);
-  const angle = Math.atan2(dx, dz);
+function Dock({ position, rotation }: { position: Vec3; rotation: number }) {
   return (
-    <mesh
-      position={[(from[0] + to[0]) / 2, 0.17, (from[2] + to[2]) / 2]}
-      rotation={[0, angle, 0]}
-    >
-      <boxGeometry args={[1.15, 0.08, length]} />
-      <meshStandardMaterial color="#2a3f30" roughness={0.95} />
-    </mesh>
-  );
-}
-
-function ZonePad({ position, color }: { position: Vec3; color: string }) {
-  return (
-    <group position={[position[0], 0.18, position[2]]}>
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.2, 2.6, 32]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.45}
-          transparent
-          opacity={0.7}
-          side={2}
-        />
+    <group position={position} rotation={[0, rotation, 0]}>
+      <mesh position={[0, 0.16, 0]}>
+        <boxGeometry args={[3.4, 0.16, 1.8]} />
+        <meshStandardMaterial color="#2a3f30" roughness={0.85} />
       </mesh>
-      <pointLight
-        position={[0, 0.5, 0]}
-        color={color}
-        intensity={0.8}
-        distance={6}
-      />
+      {[-1.2, 1.2].map((x) => (
+        <mesh key={x} position={[x, 0.55, 0.75]}>
+          <cylinderGeometry args={[0.07, 0.07, 0.9, 6]} />
+          <meshStandardMaterial color="#1c2a20" />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -147,7 +112,7 @@ function HeroDesk() {
 
   return (
     <group
-      position={[0, 0, 0]}
+      position={MAIN_ZONES.hero}
       onClick={(event) => {
         event.stopPropagation();
         setActiveZone("hero");
@@ -159,34 +124,38 @@ function HeroDesk() {
       }}
       onPointerOut={() => setHovered(false)}
     >
-      <mesh position={[0, 0.75, 0]}>
-        <boxGeometry args={[3.4, 0.18, 1.7]} />
-        <meshStandardMaterial color="#3a2818" roughness={0.8} />
+      <mesh position={[0, 0.85, 0]}>
+        <boxGeometry args={[3.6, 0.2, 1.8]} />
+        <meshStandardMaterial color="#3a2818" roughness={0.75} />
       </mesh>
       {[
-        [-1.45, 0.38, -0.65],
-        [1.45, 0.38, -0.65],
-        [-1.45, 0.38, 0.65],
-        [1.45, 0.38, 0.65],
+        [-1.5, 0.45, -0.7],
+        [1.5, 0.45, -0.7],
+        [-1.5, 0.45, 0.7],
+        [1.5, 0.45, 0.7],
       ].map((position, index) => (
         <mesh key={index} position={position as Vec3}>
-          <boxGeometry args={[0.16, 0.75, 0.16]} />
+          <boxGeometry args={[0.16, 0.9, 0.16]} />
           <meshStandardMaterial color="#2a1b10" />
         </mesh>
       ))}
-      <mesh position={[0, 1.45, -0.45]} rotation={[-0.12, 0, 0]}>
-        <boxGeometry args={[2.3, 1.25, 0.12]} />
+      <mesh position={[0, 1.65, -0.5]} rotation={[-0.12, 0, 0]}>
+        <boxGeometry args={[2.4, 1.35, 0.12]} />
         <meshStandardMaterial color="#0b1510" />
       </mesh>
-      <mesh position={[0, 1.45, -0.37]} rotation={[-0.12, 0, 0]}>
-        <planeGeometry args={[2.05, 1]} />
+      <mesh position={[0, 1.65, -0.42]} rotation={[-0.12, 0, 0]}>
+        <planeGeometry args={[2.15, 1.08]} />
         <meshStandardMaterial
           color="#7cffb2"
           emissive="#7cffb2"
           emissiveIntensity={hovered ? 1.1 : 0.55}
         />
       </mesh>
-      <WorldLabel position={[0, 2.45, 0]} color="#7cffb2">
+      <mesh position={[0, 1.05, 0]}>
+        <boxGeometry args={[2.8, 0.06, 0.7]} />
+        <meshStandardMaterial color="#1c130d" />
+      </mesh>
+      <WorldLabel position={[0, 2.75, 0]} color="#7cffb2" size={0.3}>
         HERO / ABOUT
       </WorldLabel>
     </group>
@@ -206,14 +175,14 @@ function ProjectMonitor({
   useCursor(hovered);
   const angle = [-0.35, 0, 0.35][index] ?? 0;
   const offset: Vec3 = [
-    -2.1 + index * 2.1,
+    MAIN_ZONES.projects[0] - 2.1 + index * 2.1,
     0,
-    1.1 + (index === 1 ? 0.3 : 0),
+    MAIN_ZONES.projects[2] + 1.1 + (index === 1 ? 0.3 : 0),
   ];
 
   return (
     <group
-      position={[-8 + offset[0], 0, -3 + offset[2]]}
+      position={offset}
       rotation={[0, angle, 0]}
       onClick={(event) => {
         event.stopPropagation();
@@ -225,12 +194,12 @@ function ProjectMonitor({
       }}
       onPointerOut={() => setHovered(false)}
     >
-      <mesh position={[0, 1.25, 0]}>
-        <boxGeometry args={[2.25, 1.45, 0.18]} />
-        <meshStandardMaterial color="#0b1510" />
+      <mesh position={[0, 1.35, 0]}>
+        <boxGeometry args={[2.35, 1.5, 0.18]} />
+        <meshStandardMaterial color="#0b1510" roughness={0.4} />
       </mesh>
-      <mesh position={[0, 1.25, 0.11]}>
-        <planeGeometry args={[1.95, 1.15]} />
+      <mesh position={[0, 1.35, 0.11]}>
+        <planeGeometry args={[2.05, 1.2]} />
         <meshStandardMaterial
           color="#7cffb2"
           emissive="#7cffb2"
@@ -238,10 +207,10 @@ function ProjectMonitor({
         />
       </mesh>
       <mesh position={[0, 0.45, 0]}>
-        <boxGeometry args={[0.18, 0.9, 0.18]} />
+        <boxGeometry args={[0.2, 0.9, 0.2]} />
         <meshStandardMaterial color="#2a1b10" />
       </mesh>
-      <WorldLabel position={[0, 2.35, 0]} color="#7cffb2">
+      <WorldLabel position={[0, 2.45, 0]} color="#7cffb2" size={0.28}>
         {project.command.replace("/", "").toUpperCase()}
       </WorldLabel>
     </group>
@@ -254,7 +223,7 @@ function ServiceKiosk({ onOpen }: { onOpen: () => void }) {
 
   return (
     <group
-      position={[0, 0, -10]}
+      position={MAIN_ZONES.services}
       onClick={(event) => {
         event.stopPropagation();
         onOpen();
@@ -265,12 +234,12 @@ function ServiceKiosk({ onOpen }: { onOpen: () => void }) {
       }}
       onPointerOut={() => setHovered(false)}
     >
-      <mesh position={[0, 1.05, 0]}>
-        <boxGeometry args={[2.6, 2.1, 0.7]} />
-        <meshStandardMaterial color="#0b1510" />
+      <mesh position={[0, 1.15, 0]}>
+        <boxGeometry args={[2.7, 2.2, 0.7]} />
+        <meshStandardMaterial color="#0b1510" roughness={0.45} />
       </mesh>
-      <mesh position={[0, 1.3, 0.37]}>
-        <planeGeometry args={[2.2, 1.05]} />
+      <mesh position={[0, 1.42, 0.37]}>
+        <planeGeometry args={[2.3, 1.1]} />
         <meshStandardMaterial
           color="#ffc857"
           emissive="#ffc857"
@@ -278,10 +247,10 @@ function ServiceKiosk({ onOpen }: { onOpen: () => void }) {
         />
       </mesh>
       <mesh position={[0, 0.2, 0]}>
-        <boxGeometry args={[2.8, 0.4, 0.9]} />
+        <boxGeometry args={[2.9, 0.4, 0.9]} />
         <meshStandardMaterial color="#2a1b10" />
       </mesh>
-      <WorldLabel position={[0, 2.6, 0]} color="#ffc857">
+      <WorldLabel position={[0, 2.75, 0]} color="#ffc857" size={0.3}>
         SERVICES
       </WorldLabel>
     </group>
@@ -294,7 +263,7 @@ function HireBeacon({ onOpen }: { onOpen: () => void }) {
 
   return (
     <group
-      position={[0, 0, 8]}
+      position={MAIN_ZONES.contact}
       onClick={(event) => {
         event.stopPropagation();
         onOpen();
@@ -305,8 +274,8 @@ function HireBeacon({ onOpen }: { onOpen: () => void }) {
       }}
       onPointerOut={() => setHovered(false)}
     >
-      <mesh position={[0, 1.3, 0]}>
-        <cylinderGeometry args={[0.22, 0.45, 2.6, 8]} />
+      <mesh position={[0, 1.4, 0]}>
+        <cylinderGeometry args={[0.22, 0.45, 2.8, 8]} />
         <meshStandardMaterial
           color="#ff8fa3"
           emissive="#ff8fa3"
@@ -314,12 +283,12 @@ function HireBeacon({ onOpen }: { onOpen: () => void }) {
         />
       </mesh>
       <pointLight
-        position={[0, 2.6, 0]}
+        position={[0, 2.8, 0]}
         color="#ff8fa3"
         intensity={hovered ? 3 : 1.6}
         distance={9}
       />
-      <WorldLabel position={[0, 3.1, 0]} color="#ff8fa3">
+      <WorldLabel position={[0, 3.3, 0]} color="#ff8fa3" size={0.3}>
         HIRE ME
       </WorldLabel>
     </group>
@@ -345,20 +314,12 @@ function Trees() {
   return (
     <group>
       {trees.map(([x, z, scale], index) => (
-        <group key={index} position={[x, 0.2, z]} scale={scale}>
-          <mesh position={[0, 0.55, 0]}>
-            <cylinderGeometry args={[0.12, 0.18, 1.1, 6]} />
-            <meshStandardMaterial color="#3a2818" flatShading />
-          </mesh>
-          <mesh position={[0, 1.35, 0]}>
-            <coneGeometry args={[0.75, 1.6, 7]} />
-            <meshStandardMaterial color="#2f7d4a" flatShading />
-          </mesh>
-          <mesh position={[0, 2.05, 0]}>
-            <coneGeometry args={[0.55, 1.25, 7]} />
-            <meshStandardMaterial color="#3f9a5a" flatShading />
-          </mesh>
-        </group>
+        <Tree
+          key={index}
+          position={[x, 0.28, z]}
+          scale={scale}
+          color={index % 2 === 0 ? "#2f7d4a" : "#348a52"}
+        />
       ))}
     </group>
   );
@@ -373,6 +334,8 @@ function Rocks() {
         [-6.4, 8.8, 0.5],
         [6.8, 8.6, 0.6],
         [-11.4, -2.8, 0.55],
+        [8.6, 6.2, 0.4],
+        [-8.8, -6.4, 0.45],
       ] as [number, number, number][],
     [],
   );
@@ -380,42 +343,8 @@ function Rocks() {
   return (
     <group>
       {rocks.map(([x, z, scale], index) => (
-        <mesh
-          key={index}
-          position={[x, 0.35, z]}
-          scale={scale}
-          rotation={[index * 0.7, index * 1.1, 0]}
-        >
-          <dodecahedronGeometry args={[0.55, 0]} />
-          <meshStandardMaterial color="#4b5563" flatShading />
-        </mesh>
+        <Rock key={index} position={[x, 0.4, z]} scale={scale} />
       ))}
     </group>
-  );
-}
-
-function WorldLabel({
-  position,
-  children,
-  color = "#7cffb2",
-}: {
-  position: Vec3;
-  children: string;
-  color?: string;
-}) {
-  return (
-    <Billboard position={position}>
-      <Text
-        font="/fonts/JetBrainsMono-Regular.ttf"
-        fontSize={0.32}
-        color={color}
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.015}
-        outlineColor="#050806"
-      >
-        {children}
-      </Text>
-    </Billboard>
   );
 }

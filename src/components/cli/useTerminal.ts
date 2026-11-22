@@ -21,6 +21,7 @@ import {
   type ZoneId,
 } from "@/store/usePortfolioStore";
 import { fetchGithubStats } from "@/lib/github";
+import { useGameStore } from "@/store/useGameStore";
 import { playClick, playSuccess, playWhoosh } from "@/lib/audio";
 import { COMMAND_EVENT } from "@/lib/events";
 import type { TerminalLine } from "@/components/cli/terminal-types";
@@ -40,6 +41,9 @@ const zoneTargets: Record<ZoneId, string> = {
   skills: "skills",
   services: "services",
   contact: "contact",
+  game: "game",
+  ai: "ai",
+  data: "data",
 };
 
 function findProject(query: string): Project | undefined {
@@ -376,6 +380,9 @@ export function useTerminal(options?: { boot?: boolean }) {
             services: "services",
             hire: "contact",
             contact: "contact",
+            game: "game",
+            ai: "ai",
+            data: "data",
           };
           const zone = rawZone ? aliases[rawZone] : undefined;
           if (!zone) {
@@ -402,11 +409,15 @@ export function useTerminal(options?: { boot?: boolean }) {
           output.push({ kind: "ok", text: "rover control enabled" });
           output.push({
             kind: "out",
-            text: "WASD / arrow keys to drive · drag to orbit · click a landmark",
+            text: "WASD / arrows drive · SPACE brake · SHIFT boost",
+          });
+          output.push({
+            kind: "out",
+            text: "L headlights · H horn · R reset · drag to orbit",
           });
           output.push({
             kind: "dim",
-            text: "press Esc or switch to FAST mode to return to the site.",
+            text: "click a landmark to open it. Switch to FAST mode to return.",
           });
           break;
         }
@@ -462,6 +473,54 @@ export function useTerminal(options?: { boot?: boolean }) {
           }
           store.setTheme(requested);
           output.push({ kind: "ok", text: `theme → ${requested}` });
+          break;
+        }
+
+        case "game": {
+          store.setActiveZone("game");
+          useGameStore.getState().reset();
+          document
+            .getElementById("game")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          playWhoosh();
+          output.push({ kind: "ok", text: "→ /game — ring run reset" });
+          output.push({
+            kind: "out",
+            text: "drive through the 8 glowing rings. score updates in the HUD.",
+          });
+          break;
+        }
+
+        case "ai": {
+          setZone("ai");
+          output.push({ kind: "ok", text: "→ /ai — AI Lab" });
+          output.push({
+            kind: "out",
+            text: "rag · agents · evals · computer vision · llm routing",
+          });
+          break;
+        }
+
+        case "data": {
+          setZone("data");
+          output.push({ kind: "ok", text: "→ /data — Data Harbor" });
+          output.push({
+            kind: "out",
+            text: "queues · pipelines · postgres · redis · observability",
+          });
+          break;
+        }
+
+        case "score": {
+          const game = useGameStore.getState();
+          output.push({
+            kind: "accent",
+            text: `rings: ${game.score}/${game.total}`,
+          });
+          output.push({
+            kind: "dim",
+            text: "run `game` to reset the run and fly to Game Island.",
+          });
           break;
         }
 

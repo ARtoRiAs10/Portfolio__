@@ -17,6 +17,9 @@ const presets: Record<
   skills: { position: [8, 7.5, 9], target: [8, 1.6, -3] },
   services: { position: [0, 7.5, 1], target: [0, 1.6, -10] },
   contact: { position: [0, 6.5, 19], target: [0, 1.6, 8] },
+  game: { position: [28, 8, 10], target: [28, 1.6, -4] },
+  ai: { position: [-28, 8, 10], target: [-28, 1.6, -2] },
+  data: { position: [0, 8, -16], target: [0, 1.6, -30] },
 };
 
 export function CameraRig() {
