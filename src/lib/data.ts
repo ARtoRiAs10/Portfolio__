@@ -20,6 +20,8 @@ export type Project = {
   highlights: string[];
   problem: string;
   approach: string;
+  outcome?: string;
+  metrics?: { label: string; value: string }[];
   repo: string;
   upstream?: string;
   live?: string;
@@ -64,6 +66,13 @@ export const projects: Project[] = [
       "CI/CD platforms are usually either simple hosted runners or heavy enterprise tools. I wanted a self-hostable middle ground: a control plane that schedules real work across a fleet without locking teams into a vendor.",
     approach:
       "Built a Next.js dashboard, a Node/TypeScript master that turns YAML DAGs into BullMQ jobs, and stateless workers that execute shell or SSH steps and stream logs back. Added heartbeats, exponential backoff, stalled-job recovery, Clerk auth, and plan-based rate limiting.",
+    outcome:
+      "A self-hostable CI/CD control plane that a small team can run without an enterprise contract — DAG scheduling, live logs, worker recovery, and billing in one place.",
+    metrics: [
+      { label: "pipelines", value: "YAML DAGs" },
+      { label: "workers", value: "horizontal" },
+      { label: "logs", value: "live" },
+    ],
     repo: "https://github.com/ARtoRiAs10/Orchestra",
     glyph: "dag",
   },
@@ -102,6 +111,13 @@ export const projects: Project[] = [
       "Retail investing tools show prices, not reasoning. I wanted a platform that applies institutional-grade research — factor models, risk analytics, and backtests — in a way a founder or analyst can actually use.",
     approach:
       "Built a Next.js app with a Python FastAPI ETL service and an ML research lab. Nine strategy engines cover quality, value, momentum, and distress; the portfolio layer adds correlation, Brinson attribution, efficient frontiers, and constrained optimization.",
+    outcome:
+      "An institutional-grade research workflow behind a usable product UI: nine strategy engines, cost-aware backtests, and portfolio optimization that explains itself.",
+    metrics: [
+      { label: "strategies", value: "09" },
+      { label: "backtests", value: "walk-forward" },
+      { label: "optimizer", value: "constrained" },
+    ],
     repo: "https://github.com/ARtoRiAs10/market_len",
     live: "https://market-len.vercel.app",
     glyph: "qty",
@@ -141,6 +157,13 @@ export const projects: Project[] = [
       "AI interior design demos are usually one-shot prompt generators. They fall over when a model is down, and they don't respect the room you actually have.",
     approach:
       "Built a provider router that selects the best engine per capability — text-to-image, image-to-image, vision, text — and fails over automatically. The prompt engine translates themes, styles, and budget tiers into materials, lighting, and camera direction.",
+    outcome:
+      "A working AI design studio that keeps rendering when a provider fails, with art-directed prompts that respect the actual room, style, and budget.",
+    metrics: [
+      { label: "providers", value: "05 failover" },
+      { label: "styles", value: "40+" },
+      { label: "inputs", value: "text + image" },
+    ],
     repo: "https://github.com/ARtoRiAs10/VisionVibe_",
     live: "https://vision-vibe-zeta.vercel.app",
     glyph: "img",
@@ -180,6 +203,13 @@ export const projects: Project[] = [
       "Deploying a side project still means configuring servers, Dockerfiles, and DNS. I wanted the Vercel experience, but self-hosted and built on primitives I control.",
     approach:
       "A Next.js dashboard talks to an Express API, which enqueues builds with Bull on Redis. Workers detect Dockerfiles, build images, extract static output to S3, and register the deployment behind an Nginx proxy.",
+    outcome:
+      "A self-hosted deployment platform: push a repo or ZIP, get a live URL, with a real build queue and deployment history.",
+    metrics: [
+      { label: "input", value: "repo / zip" },
+      { label: "queue", value: "Bull + Redis" },
+      { label: "output", value: "live URL" },
+    ],
     repo: "https://github.com/ARtoRiAs10/DeployHub",
     live: "https://deploy-hub-97j1.vercel.app",
     glyph: "shp",

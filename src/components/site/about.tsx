@@ -37,7 +37,7 @@ export function About() {
     <section id="about" className="scroll-mt-16 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          index="04"
+          index="05"
           command="cat about.md"
           title="Engineer first. Product thinker always."
           description="I work across the stack and the whiteboard. Most of my favorite builds start with a constraint, not a framework."

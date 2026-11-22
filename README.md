@@ -1,37 +1,61 @@
-# Gaurav Kumar — Terminal Portfolio
+# Gaurav Kumar — Dual-Mode Freelance Portfolio
 
-A terminal-style freelance portfolio built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **shadcn/ui**, and **Framer Motion**.
+A terminal portfolio that works for **non-technical buyers** and **developers** at the same time.
 
-The site is designed as a working shell: an interactive terminal hero, a filesystem-style project explorer, a `cat skills.json` stack view, a `git log` process timeline, a `neofetch` about panel, and a `./contact.sh` call to action.
+- **Fast mode** — a responsive 2D site with a working CLI, case studies, services, and a budget estimator.
+- **3D mode** — a low-poly “tech island” built with React Three Fiber, Rapier physics, a drivable rover, and four interactive zones.
+- **Bi-directional sync** — CLI commands fly the 3D camera; clicking a 3D landmark runs the matching command or opens the matching panel.
+- **Zero-friction CLI** — every key command also has a clickable chip, and `Ctrl/Cmd + K` opens a command palette.
+
+Built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **shadcn/ui**, **Framer Motion**, **Zustand**, **Three.js**, **React Three Fiber**, **Drei**, and **Rapier**.
 
 ---
 
 ## What is inside
 
 | Area | Details |
-|---|---|
-| **Interactive terminal** | Type `help`, `ls projects`, `open <project>`, `cat about.md`, `contact`, `clear`, `whoami`, `neofetch`, `sudo hire-me`. Supports history (↑/↓), tab autocomplete, and `Ctrl+L`. |
-| **Project explorer** | 15 projects with filters for `all`, `pinned`, `ai`, `fullstack`, `infra`, and `realtime`. Pinned repos are marked and collected in a dedicated strip. |
-| **Case-study dialogs** | Each project opens a `cat README.md` dialog with role, year, problem, approach, highlights, stack, live demo, and source links. |
-| **Pinned showcase** | `MeloSynthiaAI`, `FoodVision`, `OpenDocs`, `Lingo`, `Learnify`, and `DeployHub` are marked as pinned. `MeloSynthiaAI` is credited as a collaboration with the original author. |
-| **Advanced showcase** | `Orchestra`, `MarketLens`, `VisionVibe`, `PatternVault`, `EcomShop`, `NeonMeet`, `Jotion`, `FluxDeck`, and `Cybernauts`. |
-| **Animation** | Framer Motion for boot lines, staggered reveals, filter transitions, dialogs, and scroll progress. All motion respects `prefers-reduced-motion`. |
-| **Terminal design** | CRT scanlines, grid background, traffic-light window chrome, ASCII logo, mono typography, green/amber/cyan palette, blinking cursor. |
-| **SEO** | Metadata, Open Graph, a generated `/opengraph-image`, `robots.txt`, `sitemap.xml`, JSON-LD. |
-| **Responsive** | Tested from 320px to 1440px; mobile navigation uses a shadcn Sheet. |
-| **Animated profile page** | A dedicated `/profile` page with scroll-triggered reveals, gentle parallax, magnetic buttons, hover previews, and reduced-motion support. |
-| **GitHub profile kit** | `profile/` contains a ready-to-publish profile README and animated SVG banner/terminal assets for the `ARtoRiAs10/ARtoRiAs10` special repo. |
+| --- | --- |
+| **Dual-mode shell** | `Fast` and `3D` toggle in the top-right HUD. Fast mode is the default and the automatic fallback for mobile / low-end GPUs. |
+| **Interactive CLI** | `help`, `ls projects`, `open <slug>`, `services`, `estimate`, `stats`, `skills`, `drive`, `cd <zone>`, `mode <fast\|3d>`, `theme <name>`, `contact`, `clear`, `sudo hire-me`, plus `whoami`, `neofetch`, `history`, and more. |
+| **Clickable chips** | The hero terminal and 3D dock render one-click command chips so buyers never have to guess. |
+| **Case studies** | 15 projects with role, year, problem, approach, measurable outcome, metrics, stack, live demo, and source. |
+| **Services** | Basic / Standard / Premium packages with fixed scope, timeline, outcome, and CTA. |
+| **Estimator** | A 3-step scope → timeline → integrations wizard that prints a budget range and a copyable brief for Fiverr or email. |
+| **3D world** | Low-poly island with a project arcade, physics skill playground, services kiosk, hire beacon, and a drivable rover (WASD / arrows / mobile joystick). |
+| **Command palette** | `Ctrl/Cmd + K` to jump to commands, projects, themes, or sections. |
+| **Themes** | `matrix`, `mocha`, `cyber`, and `minimal` (light). Persisted in localStorage. |
+| **Sound** | Subtle Web Audio key clicks, camera whooshes, and collision thuds. Muted by default; toggle in the HUD. |
+| **Motion** | Framer Motion for boot lines, staggered reveals, dialogs, estimator steps, and the celebration. Respects `prefers-reduced-motion`. |
+| **SEO** | Metadata, Open Graph, generated `/opengraph-image`, `robots.txt`, `sitemap.xml`, and JSON-LD. |
+| **Responsive** | 320px → 1440px. Mobile navigation uses a shadcn Sheet; the 3D stage adds a touch joystick. |
+| **Profile page** | `/profile` keeps the animated scroll-triggered profile page. |
+| **GitHub profile kit** | `profile/` contains a ready-to-publish profile README and animated SVG assets. |
 
 ---
 
-## Tech stack
+## Commands
 
-- **Next.js 16** App Router, React 19, TypeScript
-- **Tailwind CSS v4**
-- **shadcn/ui** (Base UI + Radix-style primitives) — Button, Badge, Dialog, Sheet, Tabs, Tooltip, Avatar, Sonner, etc.
-- **Framer Motion** for animation
-- **next/font** — JetBrains Mono
-- **next/og** — generated social card
+| Command | What it does |
+| --- | --- |
+| `help` | Lists every command with descriptions. |
+| `about` | Flies to the hero/desk zone and shows the short bio. |
+| `ls [projects\|pinned\|ai\|fullstack\|infra\|realtime]` | Lists case studies. |
+| `open <slug>` / `cat <slug>` | Opens the case study modal and prints the outcome, metrics, stack, and links. |
+| `services` | Opens the three freelance packages. |
+| `estimate` | Launches the 3-step estimator. |
+| `stats` | Fetches live GitHub stats and shows availability. |
+| `skills` | Flies to the physics skill playground and prints the stack. |
+| `cd <hero\|projects\|skills\|services\|contact>` | Moves the camera to a zone. |
+| `drive` | Enters the 3D world and enables rover controls. |
+| `mode <fast\|minimal\|3d>` | Switches between the 2D site and the 3D world. |
+| `theme <matrix\|mocha\|cyber\|minimal>` | Changes the palette. |
+| `contact` / `hire` | Opens the hire brief, Fiverr link, Calendly link, and email form. |
+| `clear` | Clears terminal history. |
+| `sudo hire-me` | Easter egg: confetti + booking brief. |
+| `palette` | Opens the command palette. |
+| `whoami`, `neofetch`, `history`, `date`, `pwd`, `echo` | Shell conveniences. |
+
+**Keyboard:** `↑`/`↓` history · `Tab` autocomplete · `Ctrl/Cmd + K` palette · `Ctrl/Cmd + L` clear · `/` focus terminal.
 
 ---
 
@@ -59,151 +83,102 @@ npm run lint
 
 ---
 
-## Customize
+## Environment variables
 
-### Contact details
+Copy `.env.example` to `.env.local` and fill in what you need.
 
-The contact email is set in:
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata, Open Graph, robots, and sitemap. On Vercel, `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL` are detected automatically. |
+| `NEXT_PUBLIC_FIVERR_URL` | Replaces the Fiverr placeholder in the Hire / Estimator panels. |
+| `NEXT_PUBLIC_CALENDLY_URL` | Replaces the Calendly placeholder in the Hire panel. |
 
-- `src/components/site/contact.tsx` → `const email = "gauravkum2002@gmail.com"`
-- `src/lib/site.ts` → `siteConfig.email`
-
-Keep both values in sync if you change it.
-
-### Site URL
-
-The canonical URL is read from:
-
-- `NEXT_PUBLIC_SITE_URL` — set this to your custom domain, for example `https://gauravkumar.dev`
-- `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL` — automatically provided by Vercel, for example `my-app.vercel.app`
-- Falls back to `http://localhost:3000` for local development
-
-No hard-coded domain is needed for a Vercel deployment. Add `NEXT_PUBLIC_SITE_URL` in the Vercel dashboard only if you want a custom domain in canonical/OG/sitemap URLs. See `.env.example`.
-
-### Projects
-
-All project content lives in `src/lib/data.ts`:
-
-```ts
-{
-  slug: "orchestra",
-  name: "Orchestra",
-  command: "orchestra/",
-  tagline: "…",
-  description: "…",
-  category: "infra",          // ai | fullstack | infra | realtime
-  categoryLabel: "infra",
-  pinned: false,
-  featured: true,
-  year: "2026",
-  modified: "nov 18",
-  size: "122k",
-  role: "solo — design, build, deploy",
-  stack: ["TypeScript", "…"],
-  highlights: ["…"],
-  problem: "…",
-  approach: "…",
-  repo: "https://github.com/…",
-  live: "https://…",          // optional
-  glyph: "dag",
-}
-```
-
-Add or remove entries, then update the `stats` array and filter counts if needed. The project explorer and terminal `ls` command read from the same array.
-
-### Theme
-
-Terminal colors live in `src/app/globals.css`:
-
-```css
---background: #070a08;
---foreground: #d9e6dc;
---primary: #7cffb2;
---term-green: #7cffb2;
---term-amber: #ffc857;
---term-cyan: #67e8f9;
---term-red: #ff6b6b;
---term-dim: #6f7f74;
-```
-
-### Commands
-
-Edit the switch statement in `src/components/terminal/hero-terminal.tsx` to add or change commands. Command hints and autocomplete are defined near the top of the same file.
+No database or API key is required. The `stats` command calls the public GitHub API and degrades gracefully on rate limits.
 
 ---
 
-## GitHub profile page
+## Deploy to Vercel
 
-The site includes a dedicated animated profile page at **`/profile`**. It has:
+The repository is already connected to Vercel as a Git integration:
 
-- Scroll-triggered fade-ups (300–500ms, transform/opacity only)
-- Gentle parallax on the hero grid, glow, and terminal card
-- Magnetic GitHub/email buttons
-- Floating project hover previews
-- Reduced-motion fallbacks and responsive layouts
+1. Push to `main`.
+2. Vercel builds with `npm run build` and serves `.next`.
+3. `vercel.json` sets security headers and static caching.
+4. Add `NEXT_PUBLIC_FIVERR_URL` and `NEXT_PUBLIC_CALENDLY_URL` in the Vercel project settings when you have real links.
+5. Add `NEXT_PUBLIC_SITE_URL` only if you connect a custom domain.
 
-The **`profile/`** folder contains a ready-to-publish GitHub profile:
+The existing production deployment is linked from the Vercel commit status on `main`.
 
+---
+
+## Project structure
+
+```text
+src/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx                 # renders <PortfolioHome />
+│   ├── profile/page.tsx
+│   └── opengraph-image.tsx
+├── components/
+│   ├── cli/
+│   │   ├── TerminalShell.tsx
+│   │   ├── CommandInput.tsx
+│   │   ├── CommandChips.tsx
+│   │   ├── OutputRenderer.tsx
+│   │   └── useTerminal.ts
+│   ├── overlays/
+│   │   ├── TopHud.tsx
+│   │   ├── ProjectModal.tsx
+│   │   ├── ServicesPanel.tsx
+│   │   ├── EstimatorPanel.tsx
+│   │   ├── HirePanel.tsx
+│   │   ├── CommandPalette.tsx
+│   │   └── Celebration.tsx
+│   ├── three/
+│   │   ├── SceneStage.tsx
+│   │   ├── WorldCanvas.tsx
+│   │   ├── WorldIsland.tsx
+│   │   ├── RoverController.tsx
+│   │   ├── SkillBlocks.tsx
+│   │   ├── CameraRig.tsx
+│   │   └── TouchJoystick.tsx
+│   ├── site/                    # fast-mode sections
+│   └── terminal/                # window + typewriter
+├── data/
+│   ├── commands.ts
+│   └── services.ts
+├── store/
+│   └── usePortfolioStore.ts
+└── lib/
+    ├── data.ts
+    ├── github.ts
+    ├── audio.ts
+    └── site.ts
 ```
-profile/
-├── README.md
-└── assets/
-    ├── profile-banner.svg
-    └── profile-terminal.svg
-```
-
-To publish it:
-
-1. Create a public GitHub repository named exactly **`ARtoRiAs10`** (the same as your username).
-2. Copy `profile/README.md` to the new repo as `README.md`.
-3. Copy the `profile/assets/` folder to the new repo as `assets/`.
-4. Commit and push.
-
-GitHub only renders the profile README from the special repo named after your username. Markdown cannot run JavaScript, so the animated `/profile` page is linked from the profile for the scroll/parallax/hover effects.
 
 ---
 
-## Deploy
+## Performance & accessibility
 
-### Vercel (recommended)
-
-The repo includes `vercel.json`, so the framework, build command, output directory, and security headers are already configured.
-
-1. Push the repository to GitHub.
-2. In Vercel, click **Add New → Project** and import `ARtoRiAs10/project`.
-3. Framework preset: **Next.js** (auto-detected).
-4. Build command: `npm run build`.
-5. Output directory: `.next`.
-6. Add an environment variable if you have a custom domain:
-   - `NEXT_PUBLIC_SITE_URL=https://your-domain.com`
-   - Without it, Vercel uses the deployment URL automatically.
-7. Click **Deploy**.
-
-The project uses the Node.js version provided by Vercel. No database or server secrets are required.
-
-### Netlify
-
-- Build command: `npm run build`
-- Publish directory: `.next`
-- Use the Netlify Next.js runtime/plugin, or deploy to Vercel for the simplest path.
-
-### GitHub Pages
-
-GitHub Pages is not the default target for a Next.js App Router build. If you need it, configure `output: "export"` and a static-compatible setup, then publish the `out/` directory. The previous static portfolio is preserved on the `portfolio-static` branch and is ready for GitHub Pages as-is.
+- 3D canvas is lazy-loaded with `next/dynamic` and `ssr: false`.
+- Low-poly geometry, no real-time shadows, capped DPR, and `AdaptiveDpr`.
+- `PerformanceMonitor` + `AdaptiveDpr` lower resolution on slower GPUs.
+- Fast mode is the default and the automatic fallback if WebGL fails.
+- All motion respects `prefers-reduced-motion`.
+- Skip link, focus states, ARIA labels, semantic headings, and keyboard-friendly controls.
+- The CLI is fully usable without a mouse; the 3D world is fully usable without a keyboard via the touch joystick.
 
 ---
 
-## Branch history
+## Roadmap
 
-- `portfolio-static` — the first static HTML/CSS/JS version of the portfolio (preserved).
-- `main` — this Next.js + shadcn/ui + terminal version.
+The local `ROADMAP.md` contains the REA reverse-engineering summary, the phase-by-phase implementation checklist, the 4-week schedule, and the launch audit. It is intentionally **not committed**.
 
 ---
 
-## Notes
+## Credits
 
-- The terminal is an interactive frontend demo, not a real shell. It never executes code on a server.
-- The `sudo hire-me` command is an easter egg that scrolls to the contact section.
-- `MeloSynthiaAI` is a pinned project from the GitHub profile and is credited to its original author, AYUSHMAN0503.
-- The contact email is already set to `gauravkum2002@gmail.com`. Set `NEXT_PUBLIC_SITE_URL` for a custom domain, or let Vercel detect `VERCEL_URL`.
-- The site has no analytics or trackers. Add a privacy-friendly analytics provider if you want traffic data.
+- Design and code: Gaurav Kumar.
+- `MeloSynthiaAI` is a pinned collaboration and credited to the original author.
+- Low-poly world built procedurally with Three.js primitives — no external model downloads.

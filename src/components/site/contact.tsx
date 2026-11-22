@@ -32,7 +32,7 @@ export function Contact() {
     <section id="contact" className="scroll-mt-16 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          index="05"
+          index="06"
           command="./contact.sh"
           title="Have something worth building?"
           description="Tell me what you're working on — the rough version is fine. I reply within 24 hours with honest thoughts on scope, approach, and fit."

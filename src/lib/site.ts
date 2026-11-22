@@ -21,7 +21,13 @@ export const siteConfig = {
   name: "Gaurav Kumar",
   email: "gauravkum2002@gmail.com",
   github: "https://github.com/ARtoRiAs10",
-  title: "Gaurav Kumar — Terminal Portfolio",
+  fiverr:
+    process.env.NEXT_PUBLIC_FIVERR_URL?.trim() || "https://www.fiverr.com/",
+  calendly:
+    process.env.NEXT_PUBLIC_CALENDLY_URL?.trim() || "https://calendly.com/",
+  title: "Gaurav Kumar — Full-Stack & AI Engineer",
+  positioning:
+    "I build fast Next.js SaaS apps and AI workflows that ship on time.",
   description:
-    "Gaurav Kumar is a freelance full-stack and AI engineer building SaaS platforms, real-time collaboration tools, and developer infrastructure. Explore selected projects in a terminal-style portfolio.",
+    "Gaurav Kumar is a freelance full-stack and AI engineer building SaaS platforms, real-time collaboration tools, and developer infrastructure. Explore 15 case studies, fixed-scope packages, and an interactive project estimator.",
 } as const;

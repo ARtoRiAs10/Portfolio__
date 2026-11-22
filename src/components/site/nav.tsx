@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "#projects", label: "work", id: "projects" },
+  { href: "#services", label: "services", id: "services" },
   { href: "#about", label: "about", id: "about" },
   { href: "#contact", label: "contact", id: "contact" },
 ];

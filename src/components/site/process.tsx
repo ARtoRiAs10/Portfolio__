@@ -12,7 +12,7 @@ export function Process() {
     <section id="process" className="scroll-mt-16 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          index="03"
+          index="04"
           command="git log --oneline"
           title="A short path from idea to production."
           description="No black box, no big reveal. Each phase has a clear output, a demo, and a decision you can make."
