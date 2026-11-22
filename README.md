@@ -1,7 +1,11 @@
 # Gaurav Kumar — Dual-Mode Freelance Portfolio
 
 <p align="center">
-  <img src="public/banner.svg" alt="Gaurav Kumar — Full-Stack & AI Engineer. A dual-mode terminal + 3D portfolio." width="100%" />
+  <img src="public/banner.png" alt="Gaurav Kumar — Full-Stack & AI Engineer. A dual-mode terminal + 3D portfolio." width="100%" />
+</p>
+
+<p align="center">
+  <sub>Banner source: <code>public/banner.svg</code> · PNG export: <code>public/banner.png</code></sub>
 </p>
 
 A terminal portfolio that works for **non-technical buyers** and **developers** at the same time.
